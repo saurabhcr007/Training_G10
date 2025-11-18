@@ -15,11 +15,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      SOLUTION_PATH:
-          CalculatorSolution/CalculatorSolution.sln
-      UNIT_TEST_PROJECT:
-          CalculatorSolution/CalculatorTests/CalculatorSolution.sln
 
     steps:
       - name: Checkout code
@@ -35,17 +30,21 @@ jobs:
           echo "Current directory:" && pwd
           echo "List top-level files and floders:" && ls -la
           echo "List CalculatorSolution floders:" && ls -la CalculatorSolution || true
+          echo "Find any .sln files:" && find . -name ".sln" -maxdepth 3
 
       - name: Restore dependencies
-        run: dotnet restore "$SOLUTION_PATH"
+        working-directory: CalculatorSolution
+        run: dotnet restore CalculatorSolution.sln
 
       - name: Build solution
-        run: dotnet build "$SOLUTION_PATH" --configuration Release --no-restore
+        working-directory: CalculatorSolution
+        run: dotnet build CalculatorSolution.sln --configuration Release --no-restore
 
 
         #------------------Unit Test--------------------
       - name: Run unit tests
-        run: dotnet test "UNIT_TEST_PROJECT" --configuration Release --no-build --verbosity normal
+        working-directory: CalculatorSolution
+        run: dotnet test CalculatorSolution/CalculatorTests.csproj --configuration Release --no-build --verbosity normal
 
       
         
