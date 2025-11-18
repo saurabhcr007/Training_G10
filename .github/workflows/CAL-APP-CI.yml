@@ -2,13 +2,9 @@ name: Calculator App CI
 
 on:
   push:
-    branches: 
-      - "*"
-    branches-ignore:
-      - "main"
+    branches-ignore: "main"
   pull_request:
-    branches: 
-      - "*"
+    branches: "*"
       
 jobs:
   build-and-test:
