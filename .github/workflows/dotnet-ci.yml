@@ -3,14 +3,12 @@ name: .NET Build & Test
 on:
   push:
     branches:
-      - main
       - developer
       - 'feature/*'
   pull_request:
     branches:
       - main
       - developer
-      - 'feature/*'
 
 jobs:
   build-and-test:
@@ -26,15 +24,18 @@ jobs:
           dotnet-version: '8.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore CalculatorSolution/CalculatorSolution.sln
+        working-directory: CalculatorSolution
+        run: dotnet restore CalculatorSolution.sln
 
       - name: Build solution
-        run: dotnet build CalculatorSolution/CalculatorSolution.sln --configuration Release --no-restore
+        working-directory: CalculatorSolution
+        run: dotnet build CalculatorSolution.sln --configuration Release --no-restore
 
 
         #------------------Unit Test--------------------
       - name: Run unit tests
-        run: dotnet test CalculatorSolution/CalculatorTests.csproj --configuration Release --no-build --verbosity normal
+        working-directory: CalculatorSolution
+        run: dotnet test CalculatorTests/CalculatorTests.csproj --configuration Release --no-build --verbosity normal
 
       
         
