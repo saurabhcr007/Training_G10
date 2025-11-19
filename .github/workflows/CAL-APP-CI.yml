@@ -44,27 +44,34 @@ jobs:
 
       - name: Start API
         run: |
-          nohup dotnet run --project CalculatorApp > api.log 2>&1 & echo $! > api.pid
+          nohup dotnet run --project CalculatorApp --urls "http://localhost:7182" > api.log 2>&1 & echo $! > api.pid
           echo "API started"
 
       - name: Wait for API
         run: |
           echo "Waiting for API ..."
-          for i in {1..20}; do
-            if curl -s https://localhost:5000/ > /dev/null; then
+          for i in {1..30}; do
+            if curl -s https://localhost:7182/ > /dev/null 2>&1; then
               echo "API is running"
               exit 0
-            fi 
-              sleep 1
+            fi
+            echo "not up yet"
+            sleep 1
           done
           echo "API did not started"
+          tail -n 200 api.log || true
           exit 1
       - name: Test API
         run: |
-          echo "Testing GET / ..."
-          curl -v http://localhost:5000/
+          echo "GET / ..."
+          curl -v --fail http://localhost:7182/ || (cat api.log && exit 1)
+           echo "GET / Calculator"
+          curl -v --fail "http://localhost:7182/api/Calculator/add?x=2&y=3" || true
 
       - name: Stop API
         if: always()
         run: |
-          kill $(cat api.pid) || true
+          if [ -f api.pid ]; then
+            kill "$(cat api.pid)" || true
+            rm -f api.pid
+          fi
