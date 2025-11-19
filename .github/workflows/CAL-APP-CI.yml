@@ -44,14 +44,14 @@ jobs:
 
       - name: Start API
         run: |
-          nohup dotnet run --project CalculatorApp --urls "http://localhost:7182" > api.log 2>&1 & echo $! > api.pid
+          nohup dotnet run --project CalculatorApp > api.log 2>&1 & echo $! > api.pid
           echo "API started"
 
       - name: Wait for API
         run: |
           echo "Waiting for API ..."
-          for i in {1..30}; do
-            if curl -s https://localhost:7182/ > /dev/null 2>&1; then
+          for i in {1..40}; do
+            if curl -s https://localhost:7182/swagger/v1/swagger.json > /dev/null 2>&1; then
               echo "API is running"
               exit 0
             fi
@@ -61,17 +61,13 @@ jobs:
           echo "API did not started"
           tail -n 200 api.log || true
           exit 1
+          
       - name: Test API
         run: |
           echo "GET / ..."
-          curl -v --fail http://localhost:7182/ || (cat api.log && exit 1)
-           echo "GET / Calculator"
-          curl -v --fail "http://localhost:7182/api/Calculator/add?x=2&y=3" || true
+          curl -v --fail "http://localhost:7182/api/Calculator/add?x=2&y=3"
 
       - name: Stop API
         if: always()
         run: |
-          if [ -f api.pid ]; then
-            kill "$(cat api.pid)" || true
-            rm -f api.pid
-          fi
+            kill $(cat api.pid)
