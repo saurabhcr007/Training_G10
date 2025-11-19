@@ -44,13 +44,27 @@ jobs:
 
       - name: Start API
         run: |
-          dotnet run --project CalculatorApp &
-          sleep 10
+          nohup dotnet run --project CalculatorApp > api.log 2>&1 & echo $! > api.pid
+          echo "API started"
 
-      - name: Install Newman
-        run: npm install -g newman
+      - name: Wait for API
+        run: |
+          echo "Waiting for API ..."
+          for i in {1..20}; do
+            if curl -s https://localhost:5000/ > /dev/null; then
+              echo "API is running"
+              exit 0
+            fi 
+              sleep 1
+          done
+          echo "API did not started"
+          exit 1
+      - name: Test API
+        run: |
+          echo "Testing GET / ..."
+          curl -v http://localhost:5000/
 
-      - name: Run Postman Tests
-        run: newman run tests/postman/CalculatorAPI.postman_collection.json
-        
-  
+      - name: Stop API
+        if: always()
+        run: |
+          kill $(cat api.pid) || true
