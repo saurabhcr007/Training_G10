@@ -35,6 +35,11 @@ jobs:
           path: CalculatorApp/bin/**
 
       - name: Download a Build Artifact
-        uses: actions/download-artifact@v6.0.0
+        uses: actions/download-artifact@v5
+        with:
+          name: my-artifact
+      - name: Display struture of downloaded files
+        run: ls -R
+        
         
   
