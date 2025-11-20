@@ -419,3 +419,4 @@ C:\Users\40042868\Training_G10-develop\CalculatorAppTests\obj\Debug\net8.0\refin
 C:\Users\40042868\Training_G10-develop\CalculatorAppTests\obj\Debug\net8.0\CalculatorAppTests.pdb
 C:\Users\40042868\Training_G10-develop\CalculatorAppTests\obj\Debug\net8.0\CalculatorAppTests.genruntimeconfig.cache
 C:\Users\40042868\Training_G10-develop\CalculatorAppTests\obj\Debug\net8.0\ref\CalculatorAppTests.dll
+C:\Users\40042868\Training_G10-develop\CalculatorAppTests\obj\Debug\net8.0\CalculatorAppTests.sourcelink.json
