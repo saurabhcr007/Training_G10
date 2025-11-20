@@ -13,12 +13,12 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/Build.yml
     with:
       run-condition: ${{ github.actor == 'SaurabhDev2001' || github.base_ref != 'main' }}
 
   test:
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/Test.yml
     with:
       run-condition: ${{ github.actor == 'SaurabhDev2001' || github.base_ref != 'main' }}     
 
