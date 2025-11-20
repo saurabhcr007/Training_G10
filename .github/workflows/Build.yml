@@ -28,8 +28,7 @@ jobs:
       - name: Build Solution
         run: dotnet build --no-restore
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
+      - name: Upload a GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: Calculator-build
-          path: CalculatorApp/bin/**
+          files: CalculatorApp/bin/**
