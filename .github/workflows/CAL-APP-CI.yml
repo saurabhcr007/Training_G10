@@ -2,12 +2,17 @@ name: Calculator App CI
 
 on:
   push:
-    branches-ignore: "main"
+    branches-ignore: 
+      - main
   pull_request:
-    branches: "*"
+    branches: 
+      - develop
+      - 'feature/*'
+      - main
       
 jobs:
   build-and-test:
+    if: github.actor == 'SaurabhDev2001' || github.base_ref != 'main'
     runs-on: ubuntu-latest
 
     steps:
