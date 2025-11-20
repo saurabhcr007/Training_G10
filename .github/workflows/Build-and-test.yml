@@ -1,0 +1,53 @@
+name: Calculator App CI
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches: "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: github.actor == 'SaurabhDev2001' || github.base_ref != 'main'
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/chechout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore Dependencies
+        run: dotnet restore
+
+      - name: Build Solution
+        uses: actions/upload-artifact@v4
+        with:
+          name: Calculator-build
+          path: CalculatorApp/bin/**
+          retention-days: 30
+
+test:
+  runs-on: ubuntu-latest
+  needs: build
+  if: github.actor == 'SaurabhDev2001' || github.base_ref != 'main'
+   
+  steps:
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: "8.0.x"
+
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: Calculator-build
+
+    - name: Run Tests
+      run: dotnet test --no-build --verbosity normal
+
+      
