@@ -1,0 +1,26 @@
+name: Test Workflow
+
+on:
+  workflow_call:
+    inputs:
+      run-condition:
+        required: true
+        type: string
+
+jobs:
+  test:
+    if: ${{ inputs.run-condition == 'true' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Download Build Artifactg
+        uses: actions/download-artifct@v5
+        with:
+          name: Calculator-build
+
+      - name: Run Tests
