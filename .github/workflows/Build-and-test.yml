@@ -5,7 +5,12 @@ on:
     branches-ignore:
       - main
   pull_request:
-    branches: "*"
+    branches:
+      - develop
+      - develop1
+      - 'feature1/*'
+      - main
+      
 
 jobs:
   build:
@@ -25,10 +30,13 @@ jobs:
         run: dotnet restore
 
       - name: Build Solution
+        run: dotnet build --no-restore
+
+      - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Calculator-build
-          path: CalculatorApp/bin/**
+          path: '**/bin/Debug/net8.0/**'
           retention-days: 30
 
   test:
